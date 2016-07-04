@@ -50,12 +50,14 @@ if [ "$mybatis_repo" == "https://github.com/mybatis/spring.git" ] && [ "$TRAVIS_
   if [ $VER == "16" ]; then
     mvn clean deploy -q --settings ./travis/settings.xml
     echo -e "Successfully deployed SNAPSHOT artifacts to Sonatype under Travis job ${TRAVIS_JOB_NUMBER}"
-  elif [ $VER == "17" ]; then
+  elif [ $VER == "18" ]; then
     mvn clean test jacoco:report coveralls:report -q
     echo -e "Successfully ran coveralls under Travis job ${TRAVIS_JOB_NUMBER}"
-	# various issues exist currently in building this so comment for now
-	# mvn site site:deploy -q
-	# echo -e "Successfully deploy site under Travis job ${TRAVIS_JOB_NUMBER}"
+    # various issues exist currently in building this so comment for now
+    # mvn site site:deploy -q
+    # echo -e "Successfully deploy site under Travis job ${TRAVIS_JOB_NUMBER}"
+    mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar -Dsonar.host.url=https://sonarqube.com -Dsonar.login=ccf0be39fd0ca5ea5aa712247c79da7233cd3caa
+    echo -e "Successfully ran Sonar integration under Travis job ${TRAVIS_JOB_NUMBER}"	
   fi
 else
   echo "Travis build skipped"
